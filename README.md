@@ -113,11 +113,9 @@ distinctions, no purely observational procedure can certify its reliability for 
 
 ## Repository Contents
 
-- `unfaithful_cut.tex` — master LaTeX source  
+- `unfaithful_cut_undetectable_interventions.tex` — master LaTeX source  
 - `sections/` — main paper sections  
-- `appendices/` — worked examples and technical details  
-- `bib/references.bib` — bibliography  
-- `figures/` — figures and diagrams  
+- `paper.bib` — bibliography  
 
 Key appendices:
 
@@ -133,11 +131,15 @@ Key appendices:
 
 Build the PDF:
 
-    latexmk -pdf -interaction=nonstopmode -halt-on-error unfaithful_cut.tex
+    latexmk -pdf -interaction=nonstopmode -halt-on-error unfaithful_cut_undetectable_interventions.tex
 
 Clean build artifacts:
 
-    latexmk -C
+    latexmk -C -outdir=build unfaithful_cut_undetectable_interventions.tex
+
+The compiled PDF will be located at:
+
+    build/unfaithful_cut_undetectable_interventions.pdf
 
 ---
 
