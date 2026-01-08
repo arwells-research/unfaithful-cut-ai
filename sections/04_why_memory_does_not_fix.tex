@@ -1,0 +1,41 @@
+\section{Why Memory Alone Does Not Ensure Faithfulness}
+
+A common response to intervention failure is to attribute it to missing history. If a
+state representation collapses trajectories too aggressively, the objection goes, then
+the remedy is to add memory. In practice, this motivates the use of recurrent models,
+belief states, latent variables, or other mechanisms intended to encode longer temporal
+dependencies.
+
+In principle, a sufficiently expressive memory could encode all
+intervention-relevant distinctions. The issue identified here is not a limitation of
+memory capacity itself, but the absence of any structural guarantee that standard
+training objectives will preserve the distinctions required for intervention.
+
+While such approaches can improve predictive performance, they do not resolve the
+structural issue identified in this paper. Adding memory can restore predictive
+performance without ensuring faithfulness.
+
+Memory-augmented models encode surrogates for history rather than preserving history as
+an admissible structure. They can summarize past observations in ways that are sufficient
+for forecasting under the training distribution. However, nothing in the presence of
+memory alone guarantees that the resulting interface preserves the distinctions required
+for counterfactual reasoning under intervention.
+
+The core issue is therefore not whether a model stores more information, but whether its
+interface respects the distinctions that admissible interventions can make
+operationally relevant. A representation may carry extensive historical detail and still
+collapse trajectories that diverge only when acted upon.
+
+This limitation appears across common modeling choices. Recurrent neural networks can
+compress long trajectories into a hidden state optimized for prediction, not
+intervention. Belief states in partially observable settings can summarize uncertainty
+under a fixed observation process while remaining fragile to action-induced changes.
+Latent variables can absorb unmodeled factors in ways that improve fit without ensuring
+counterfactual invariance.
+
+These approaches function as computational workarounds. They can be effective within
+the regime in which they are trained and evaluated. They should not be mistaken for
+structural guarantees.
+
+Calling an equivalence class of histories a ``state'' does not make the system
+state-based.

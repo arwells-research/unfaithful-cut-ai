@@ -1,0 +1,36 @@
+\section{Introduction}
+
+Predictive models are increasingly deployed in settings where their outputs are used
+to select actions rather than merely forecast outcomes. In such settings, it is now
+well established that strong predictive performance does not guarantee reliable
+behavior under intervention. Systems that appear robust under evaluation can fail
+when acted upon, even within nominal operating regimes.
+
+As predictive models are increasingly embedded in decision-making and control
+pipelines—including reinforcement learning from human feedback, autonomous systems,
+and policy-guided optimization—the distinction between observational adequacy and
+interventional validity becomes operationally critical. The diagnostic introduced here
+is intended to complement existing reliability and robustness methods by identifying
+representational failure modes before deployment, rather than correcting them after
+failure.
+
+This gap is visible across several areas of modern machine learning. In sim-to-real
+robotics, simulators that accurately reproduce observed rollouts can nonetheless yield
+controllers that behave unstably when actuated on physical systems. In offline
+reinforcement learning, policies that evaluate well on logged data can collapse under
+small policy changes at deployment. In causal inference, models that predict outcomes
+from observational data can fail when used to guide interventions.
+
+These failures are often attributed to distribution shift, insufficient data coverage,
+or optimization error. While such factors play a role, they do not explain why failures
+can persist even when predictive accuracy is high.
+
+This paper isolates a structural source of the predictive--interventional gap. We show
+that a model can be observationally adequate yet incapable of supporting intervention
+because of how it reduces underlying trajectories to representational states. This
+failure arises when distinct histories are collapsed into a single representation in a
+way that is invisible under observation but decisive under control.
+
+We refer to this failure as an \emph{Unfaithful Cut}. The contribution of this work is not
+a new learning algorithm or training procedure, but a diagnostic criterion for detecting
+when predictive models should not be trusted under intervention, prior to deployment.

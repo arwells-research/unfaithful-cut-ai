@@ -1,0 +1,63 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite it as below."
+type: article
+title: "The Unfaithful Cut: Why Some Intervention Failures Are Undetectable from Observation Alone"
+
+authors:
+  - family-names: "Wells"
+    given-names: "A. R."
+    email: "arwells.research@proton.me"
+    affiliation: "Dual-Frame Research Group"
+
+abstract: >
+  This paper formalizes an epistemic limitation of observational evaluation: some failures
+  under intervention are undetectable from observation alone, even when predictive accuracy
+  at the model interface is perfect. The core diagnostic is the unfaithful cut, a reduction
+  induced by a model’s representational interface that is closed under prediction but not
+  closed under admissible interventions. When distinct trajectories (histories) are collapsed
+  into a single interface state, observational adequacy can be preserved while intervention
+  behavior becomes underdetermined: admissible actions may separate histories the interface
+  treats as equivalent, yielding counterfactual ambiguity that cannot be resolved by additional
+  observational data or improved prediction alone. The framework is consistent with causal
+  insufficiency (from a causal inference perspective) while emphasizing how insufficiency can
+  arise from representational interface design in learned systems where causal structure is
+  implicit. The paper provides formal definitions, a diagnostic test, and worked illustrative
+  examples including a tractable finite special case and a minimal offline-RL-style setting.
+
+
+keywords:
+  - intervention
+  - observational evaluation
+  - causal insufficiency
+  - counterfactual reasoning
+  - representation learning
+  - state abstraction
+  - state aliasing
+  - offline reinforcement learning
+  - sim-to-real
+  - control
+  - robustness
+  - distribution shift
+  - epistemic limits
+  - diagnostics
+
+license: "CC-BY-4.0"
+
+# Update this URL if/when you create the GitHub repository for this paper.
+repository-code: "https://github.com/arwells-research/unfaithful-cut-ai"
+
+# Prefer the all-versions (concept) DOI here for long-term stability.
+doi: "10.5281/zenodo.18181966"
+
+date-released: 2026-01-08
+
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Wells"
+      given-names: "A. R."
+  title: "The Unfaithful Cut: Why Some Intervention Failures Are Undetectable from Observation Alone"
+  year: 2026
+  publisher: "Zenodo"
+  doi: "10.5281/zenodo.18181967"
+  version: "v1"

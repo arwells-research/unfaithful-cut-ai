@@ -1,0 +1,44 @@
+\section{The Predictive--Interventional Gap}
+
+This section makes precise the distinction that motivates the paper. Predictive models
+are typically evaluated on their ability to reproduce observed outcomes under a fixed
+data-collection process. Deployment, however, often uses models to select actions, which
+introduces a different requirement: the model must remain valid when the action
+distribution changes.
+
+We separate these requirements into two notions of adequacy.
+
+\paragraph{Observational adequacy.}
+A model is \emph{observationally adequate} if it reproduces the statistics of observed
+data at its interface. Concretely, conditioning on whatever representation the model
+uses (observations, features, latent states), it predicts outcomes correctly for the
+queries and distributions encountered during training and validation. This is the
+standard notion captured by predictive losses, held-out accuracy, calibration, and
+related metrics.
+
+\paragraph{Interventional validity.}
+A model is \emph{interventionally valid} if its interface supports reliable reasoning
+under admissible interventions. Here ``intervention'' is used in the broad operational
+sense relevant to machine learning: selecting an action, changing a policy, applying a
+control input, or otherwise altering the system through a decision. A model is
+interventionally valid when its representation preserves the distinctions required for
+such interventions to have stable predicted consequences.
+
+These notions can come apart. A model can be correct about what happens under observation
+and wrong about what can be done.
+
+The reason is that observational evaluation typically probes only a restricted set of
+trajectory continuations. If the model interface collapses distinct trajectories into
+the same representation, this collapse may be harmless under the observational
+distribution: the merged trajectories produce indistinguishable outcomes for the
+observed queries. Predictive performance can therefore be high even when the reduction
+has erased information that becomes decisive once actions are introduced.
+
+Interventions expose this hidden structure. An admissible intervention can separate two
+trajectories that were equivalent at the interface under observation, leading to
+different outcomes despite identical interface states prior to acting. When such
+separation is possible, a model that is observationally adequate may nonetheless fail to
+support reliable intervention.
+
+This paper focuses on diagnosing precisely this situation: cases in which an apparently
+successful predictive representation cannot be trusted for control.

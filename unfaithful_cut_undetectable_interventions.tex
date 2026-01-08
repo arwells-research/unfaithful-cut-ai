@@ -1,0 +1,43 @@
+\documentclass[11pt]{article}
+
+\usepackage[numbers]{natbib}
+\usepackage[margin=1in]{geometry}
+\usepackage{times}
+\usepackage{microtype}
+\usepackage{hyperref}
+\usepackage{amsmath,amssymb}
+\usepackage{graphicx}
+\usepackage{enumitem}
+
+\title{\textbf{The Unfaithful Cut: Why Some Intervention Failures Are Undetectable from Observation Alone}}
+\author{
+  A.\ R.\ Wells\\
+  \textit{Dual-Frame Research Group}\\
+}
+\date{January 7, 2026}
+
+\begin{document}
+\maketitle
+
+\input{sections/00_abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_predictive_interventional_gap}
+\input{sections/03_unfaithful_cut_definition}
+\input{sections/04_why_memory_does_not_fix}
+\input{sections/05_canonical_failure_modes}
+\input{sections/06_diagnostic_test}
+\input{sections/07_relationship_to_frameworks}
+\input{sections/08_safety_and_deployment}
+\input{sections/09_limitations_and_scope}
+\input{sections/10_conclusion}
+\appendix
+\input{sections/appendix_a_toy_example}
+\input{sections/appendix_b_tractable_case}
+\input{sections/appendix_c_empirical_illustration}
+
+\nocite{*}
+\bibliographystyle{plainnat}
+\bibliography{paper}
+
+\end{document}

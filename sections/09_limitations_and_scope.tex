@@ -1,0 +1,97 @@
+\section{Limitations and Scope}
+
+Although this paper is diagnostic rather than constructive, it is useful to briefly
+outline directions in which faithful representations might be sought. These remarks are
+not prescriptions, algorithms, or completeness claims. They are intended to clarify what
+would be required to avoid unfaithful cuts, not to specify how to achieve it in practice.
+Developing such methods remains an open research problem. Empirical evaluation of the
+diagnostic—such as application to large-scale simulators, offline reinforcement learning
+benchmarks, or real-world deployment datasets—would be valuable future work, but is
+intentionally outside the scope of this paper.
+
+The diagnostic does not eliminate uncertainty, nor does it substitute for empirical
+evaluation or experimentation. Even when a representation is intervention-consistent
+according to the criteria described here, reliable deployment may still require
+additional testing, robustness analysis, or domain-specific safeguards.
+
+What the diagnostic provides is a necessary condition for trust under intervention. It
+identifies situations in which a predictive model cannot, in principle, be relied upon
+for control because its interface collapses distinctions that admissible interventions can make
+operationally relevant. In such cases, failure under intervention is not a matter
+of insufficient data or tuning, but a consequence of representational structure.
+
+From a causal inference perspective, such cases correspond to causal insufficiency; the
+diagnostic makes explicit how this insufficiency arises from representational interface
+choices rather than from estimation error or data scarcity.
+
+The diagnostic is therefore conservative. It flags structural risk without certifying
+safety. A faithful cut does not guarantee successful intervention, but an unfaithful cut
+precludes it. The scope of this work is to delineate that boundary.
+
+\subsection{Constructive Directions Beyond the Diagnostic}
+
+This work is intentionally diagnostic rather than constructive. It identifies when a
+representation cannot be trusted under intervention, but does not prescribe how to
+repair such failures. Nevertheless, the framework suggests several directions for future
+work aimed at designing or identifying intervention-consistent representations.
+
+Algorithmic tools for detecting unfaithful cuts—potentially drawing on causal discovery,
+sensitivity analysis, or targeted intervention probes—represent a natural extension of
+the diagnostic, but are not pursued here.
+
+One trivial but instructive case is the identity reduction: representations that retain
+full intervention-sufficient state are faithful by construction, though often
+impractical. More generally, faithful reductions must preserve distinctions admissible
+interventions can make operationally relevant, which imposes stronger conditions than
+predictive sufficiency alone.
+
+In applied settings, domain-informed state augmentation guided by known intervention
+effects may mitigate unfaithful cuts. For example, incorporating variables known to
+mediate control authority or treatment response can reduce representational collapse,
+even if such variables are weakly predictive under observational data.
+
+Another promising direction is the use of active intervention during data collection or
+training to expose distinctions that passive observation conceals. By deliberately
+probing the system with admissible actions, one may detect or avoid reductions that are
+predictively adequate but interventionally unstable.
+
+\paragraph{Trade-offs and limitations of mitigation strategies.}
+All proposed mitigation strategies for unfaithful cuts involve fundamental trade-offs
+between representational fidelity, computational tractability, and epistemic certainty.
+Augmenting representations to preserve intervention-relevant distinctions typically
+increases state dimensionality, model complexity, or sample requirements, and may be
+infeasible in high-dimensional or partially observed systems. Conversely, approximate
+diagnostic methods—such as sampling-based intervention probes or stress-testing under
+policy perturbations—introduce unavoidable risks of both false negatives (failing to
+excite collapsed distinctions) and false positives (flagging distinctions that are
+operationally irrelevant in deployment).
+
+These trade-offs are not incidental but reflect the same epistemic limits formalized by
+the unfaithful cut: when intervention-relevant distinctions are not encoded at the
+interface, no finite observational or approximate procedure can guarantee their
+detection. Mitigation strategies should therefore be understood as risk-management tools
+rather than correctness guarantees. The diagnostic framework clarifies when such trade-offs
+are unavoidable, but does not eliminate them.
+
+Extensions to multi-agent systems, continuous control, or jointly adaptive settings
+raise additional questions about admissible interventions and interface design, and
+offer further opportunities to test the limits of representational faithfulness.
+
+Finally, in restricted domains with known dynamics or safety constraints, formal
+verification methods may be used to certify intervention closure of a representation.
+Such approaches are unlikely to scale broadly, but they illustrate how the diagnostic
+could inform constructive guarantees in specialized settings.
+
+These directions are not developed in this paper. They are included to clarify how the
+unfaithful cut can serve as a foundation for future work on intervention-robust
+representations, rather than as an end in itself.
+
+The empirical illustration in Appendix~C is intentionally minimal. Its purpose is to
+demonstrate feasibility of the diagnostic in a stochastic, offline reinforcement
+learning–like setting, not to provide a benchmark or performance claims. Scaling the
+diagnostic to large real-world datasets would require domain-specific choices about
+interventions, divergence criteria, and sampling strategies, and lies beyond the scope
+of this paper.
+
+Improving accessibility through visual summaries or reference implementations may aid
+adoption, but the present work prioritizes formal clarity and generality over tooling.

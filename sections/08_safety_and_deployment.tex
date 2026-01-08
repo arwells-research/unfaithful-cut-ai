@@ -1,0 +1,37 @@
+\section{Implications for AI Safety and Deployment}
+
+Many failures attributed to deployment risk are not caused by instability,
+overfitting, or insufficient optimization. This section focuses on representational risk rather than deployment workflows, which
+are necessarily domain-specific. Instead, they arise when a model is
+applied in a regime that requires distinctions its representation cannot support.
+In such cases, predictive performance is a poor proxy for reliability under
+intervention.
+
+The Unfaithful Cut clarifies why standard safety checks can be insufficient.
+Evaluation protocols typically probe a model under observation or under limited
+action distributions. If the model interface collapses trajectories that are only
+distinguishable under intervention, these checks cannot reveal the resulting
+failure mode. A model may therefore appear stable and well-calibrated while
+remaining incapable of supporting reliable control.
+
+From a deployment perspective, reliability depends not only on how well a model
+predicts, but on whether its representation is intervention-consistent for the
+actions it will be asked to support. This consideration is orthogonal to training
+quality: a well-trained model can still be unsafe under intervention if its
+interface induces an unfaithful cut.
+
+The diagnostic presented in this paper enables a complementary form of
+pre-deployment assessment. Rather than asking whether a model performs well on
+held-out data, it asks whether the model’s interface preserves the distinctions
+that admissible interventions can make operationally relevant. When the answer is
+negative, additional data or optimization cannot guarantee reliable behavior,
+because the failure lies in the representation itself.
+
+For researchers, this perspective emphasizes auditing model interfaces in addition to
+optimizing predictive metrics; for practitioners, it cautions against relying on
+observational validation when models are used to guide intervention.
+
+The implication is not that intervention should be avoided, but that
+representational assumptions must be audited before intervention is attempted.
+Identifying unfaithful cuts provides a principled way to delineate the conditions
+under which predictive models can be relied upon for decision-making and control.

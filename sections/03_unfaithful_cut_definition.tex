@@ -1,0 +1,143 @@
+\section{The Unfaithful Cut}
+
+This section introduces the central diagnostic of the paper. The diagnostic is intentionally representational and epistemic in scope: it characterizes
+when intervention failure is fundamentally undetectable from observational evaluation
+alone, rather than proposing a new causal criterion or learning algorithm.
+
+Any predictive model operates across an interface that defines what the model can
+observe, store, and condition on. This interface induces a reduction from underlying
+system trajectories to a smaller set of representational states. In practice, many
+distinct trajectories may be mapped to the same interface representation.
+
+Such reductions are unavoidable and are not inherently problematic. Indeed, they are
+necessary for learning and generalization. The issue addressed here is not reduction
+itself, but a failure mode in which a reduction preserves predictive accuracy while
+destroying distinctions required for intervention.
+
+We refer to this failure as an \emph{Unfaithful Cut}.
+
+A reduction is said to be \emph{closed under prediction} if all trajectories that are
+equivalent at the model interface yield identical predictions for all observational
+queries evaluated during training and validation. This notion corresponds to observational adequacy: the model reproduces the statistics of observed data at its interface.
+
+A reduction is said to be \emph{closed under intervention} if all trajectories that are
+equivalent at the model interface remain equivalent under all admissible interventions.
+This notion corresponds to interventional validity: the interface preserves all
+distinctions that actions can later make operationally relevant.
+
+Concrete illustrations of this epistemic limitation are provided in Appendices A–C.
+
+\paragraph{Diagnostic Definition (Unfaithful Cut).}
+An \emph{Unfaithful Cut} is a reduction that is closed under prediction but not closed
+under intervention. Equivalently, an unfaithful cut exists when two trajectories are
+indistinguishable at the model interface under observation, yet are separated by at
+least one admissible intervention.
+
+This failure is typically invisible during training. Standard learning procedures
+expose the model only to observational queries drawn from a fixed data-generating
+process. If two trajectories are observationally indistinguishable at the interface,
+no predictive objective can force the model to distinguish them. The reduction
+therefore appears sufficient by all standard metrics.
+
+The failure manifests only at deployment, when interventions are introduced. Actions
+act on the underlying system, not on the reduced representation. As a result,
+interventions can expose distinctions between trajectories that were erased by the
+cut. When this occurs, the model encounters a regime in which its interface no longer
+supports reliable control.
+
+This failure is not attributable to data scarcity or optimization error.
+Rather, it arises because the representation induced by the model interface is not
+intervention-consistent. The limitation is structural and epistemic: it concerns what
+cannot be inferred from observation alone.
+
+\subsection{Formal Definitions}
+
+We now provide a minimal formalization sufficient to make the notion of an unfaithful cut
+precise. The goal is not to impose a particular modeling framework, but to fix notation
+and clarify the structural content of the definitions used throughout the paper.
+
+Let $\mathcal{H}$ denote the set of admissible trajectories of a system. A trajectory
+$h \in \mathcal{H}$ represents a complete system history, including all variables and
+degrees of freedom relevant to the underlying dynamics. No assumptions are made about
+how $\mathcal{H}$ is generated or whether it is known explicitly. This abstraction is intentional: the diagnostic concerns representational sufficiency
+under admissible interventions, not the generative mechanisms or stochastic structure of the underlying process.
+
+A predictive model operates through an interface that induces a reduction of
+$\mathcal{H}$ to a representational space $\mathcal{S}$. We represent this reduction by
+a mapping
+\[
+\pi : \mathcal{H} \rightarrow \mathcal{S},
+\]
+which assigns each trajectory to a model state or interface representation.
+
+This mapping induces an equivalence relation on trajectories:
+\[
+h_1 \sim_\pi h_2 \quad \text{if and only if} \quad \pi(h_1) = \pi(h_2).
+\]
+Trajectories equivalent under $\sim_\pi$ are indistinguishable at the model interface.
+
+We represent interventions abstractly as operators acting on trajectories. Let
+$\mathcal{I}$ denote a set of admissible interventions, where each
+$I \in \mathcal{I}$ maps trajectories to trajectories:
+\[
+I : \mathcal{H} \rightarrow \mathcal{H}.
+\]
+An intervention may represent an action, control input, or policy change, understood as
+producing a counterfactual trajectory corresponding to applying that operation at the
+interface. No assumptions are made about the internal structure of interventions beyond
+their effect on trajectories.
+
+Admissible interventions are defined relative to a deployment context and intended use
+of the model. Informally, an intervention is admissible if it corresponds to an action
+or manipulation that the model may be used to evaluate or support in practice. The
+diagnostic depends only on the existence of at least one admissible intervention that
+separates interface-equivalent trajectories, not on exhaustive enumeration of all
+possible interventions.
+
+\paragraph{Prediction closure.}
+The reduction $\pi$ is said to be \emph{closed under prediction} if, for all
+$h_1, h_2 \in \mathcal{H}$ such that $h_1 \sim_\pi h_2$, the model assigns identical
+predictions to $h_1$ and $h_2$ for all observational queries evaluated during training
+and validation. This corresponds to observational adequacy.
+
+\paragraph{Intervention closure.}
+The reduction $\pi$ is said to be \emph{closed under intervention} if, for all
+$h_1, h_2 \in \mathcal{H}$ such that $h_1 \sim_\pi h_2$, and for all admissible
+interventions $I \in \mathcal{I}$,
+\[
+I(h_1) \sim_\pi I(h_2).
+\]
+That is, trajectories that are indistinguishable at the interface remain
+indistinguishable after any admissible intervention.
+
+\paragraph{Unfaithful Cut.}
+An \emph{Unfaithful Cut} occurs when the reduction $\pi$ is closed under prediction but
+not closed under intervention. Equivalently, there exist trajectories
+$h_1, h_2 \in \mathcal{H}$ and an admissible intervention $I \in \mathcal{I}$ such that
+$h_1 \sim_\pi h_2$ but $I(h_1) \not\sim_\pi I(h_2)$.
+
+This formalization makes explicit that the unfaithful cut is a structural property of the
+representation induced by the model interface. It does not depend on learning
+procedures, data availability, or optimization quality, and can arise even in
+deterministic systems with perfect observational prediction.
+
+Trajectories that are indistinguishable at the interface under observation may
+nonetheless diverge when acted upon by admissible interventions.
+
+\paragraph{Scope and relation to causal insufficiency.}
+An unfaithful cut corresponds, from a causal inference perspective, to a form of causal
+insufficiency: histories that differ in their response to intervention are collapsed by
+the interface representation. The contribution of the unfaithful cut is not to identify
+a failure mode distinct from causal insufficiency, but to make explicit how such failures
+arise from representational interface choices, through representational interface choices that determine whether causal distinctions are preserved or erased.
+
+Framed this way, the unfaithful cut highlights a fundamental limitation of observational
+evaluation: even with perfect prediction over the interface variables, intervention
+behavior may remain indeterminate when histories with distinct intervention responses are
+collapsed. This limitation is epistemic rather than statistical, and cannot be resolved
+by additional data alone.
+
+The unfaithful cut does not identify failures beyond those recognizable as causal
+insufficiency; rather, it provides a representational perspective that makes explicit how
+such insufficiency can arise from interface design choices, particularly in learned
+systems where causal structure is implicit rather than specified.

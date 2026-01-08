@@ -1,0 +1,34 @@
+\section{Conclusion}
+
+Predictive accuracy and interventional reliability are distinct properties of a model,
+and conflating them obscures a class of structural failure modes that remain invisible
+under standard evaluation.
+A system may reproduce observed outcomes with high fidelity and still be incapable of
+supporting reliable intervention. This failure arises when a representational reduction
+collapses distinct trajectories into a single interface state, preserving observational
+adequacy while breaking the counterfactual distinctions required for control.
+
+We have formalized this failure as an \emph{Unfaithful Cut}. It is not a consequence of
+insufficient data, poor optimization, or limited model capacity, but a limitation induced
+by representational interface choices. Because the failure is structural and epistemic,
+it cannot be repaired by additional training or improved predictive performance alone.
+
+The contribution of this work is diagnostic rather than constructive. We have presented a
+criterion for identifying when a predictive model cannot, in principle, be trusted under
+intervention, and illustrated its relevance in sim-to-real robotics, offline
+reinforcement learning, and causal inference. While the diagnostic does not prescribe how
+to construct faithful representations, it delineates a boundary: beyond this boundary,
+interventional behavior is fundamentally underdetermined by observational data.
+
+This perspective suggests directions for future research. Faithful representations are
+guaranteed when the interface preserves full intervention-sufficient state, and may be
+approximated through domain-informed state augmentation guided by known intervention
+effects. More generally, active intervention during data collection, formal verification
+in restricted domains, and information-theoretic characterizations of
+intervention-consistent reductions are promising avenues for developing constructive
+methods grounded in the diagnostic framework introduced here.
+
+As predictive systems increasingly mediate real-world decisions, distinguishing
+observational adequacy from interventional reliability is essential for responsible
+deployment. The unfaithful cut makes explicit a fundamental limit of observational
+evaluation: some intervention failures are undetectable from observation alone, regardless of predictive accuracy.

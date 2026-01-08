@@ -1,0 +1,60 @@
+\section{Canonical Failure Modes}
+
+This section presents three canonical failure modes in which predictive models perform
+well under observation yet fail under intervention. Each case follows the same pattern:
+a model interface induces equivalence classes over trajectories that are harmless during
+training but unstable under admissible interventions. In all cases, the resulting
+failure is predictable prior to deployment using the diagnostic described in
+Section~6.
+
+\subsection{Sim-to-Real Robotics}
+
+In sim-to-real robotics, a simulator is often validated by its ability to reproduce
+observed rollouts under a fixed policy. At the simulator interface, many distinct
+physical trajectories may be collapsed into a single abstract state, such as a
+low-dimensional pose or contact representation. Under observation, this reduction can
+be predictively adequate.
+
+Deployment introduces actuation. Control inputs act on the physical system, not on the
+abstract state. Small differences in contact dynamics, friction, compliance, or timing
+can separate trajectories that were equivalent at the simulator interface. As a result,
+the controller encounters outcomes that the simulator could not distinguish.
+
+\paragraph{Diagnosis.}
+The simulator interface induces an equivalence class over trajectories that is stable
+under observation but unstable under actuation. The reduction is therefore an unfaithful
+cut at the physics abstraction layer.
+
+\subsection{Offline Reinforcement Learning}
+
+Offline reinforcement learning trains policies from logged trajectories generated under
+one or more behavior policies. Evaluation typically assumes that the learned policy will
+operate within the support of the logged data. At the model interface, trajectories are
+grouped by a state representation learned or assumed during training.
+
+A change in policy constitutes an intervention. Even a small policy change can induce
+actions that separate trajectories previously treated as equivalent at the interface.
+Because the offline model cannot distinguish these trajectories, the induced behavior
+can fall outside the regime in which predictions were valid.
+
+\paragraph{Diagnosis.}
+The state representation collapses histories that are observationally equivalent under
+the behavior policy but distinguishable under the learned policy. The equivalence is not
+stable under intervention, yielding an unfaithful cut at the state definition.
+
+\subsection{Causal Inference in Medicine}
+
+In medical decision-making, predictive models are often trained on observational patient
+data to estimate outcomes. At the model interface, patients with different underlying
+histories may be mapped to the same representation based on observed variables. This can
+yield accurate predictions of outcomes under observed treatment distributions.
+
+Treatment selection is an intervention. A chosen treatment can separate patient
+trajectories that were indistinguishable at the interface. Latent factors, unobserved
+progression, or prior interventions can cause identical interface states to respond
+differently to the same action.
+
+\paragraph{Diagnosis.}
+The patient representation conflates histories that are equivalent under observation but
+distinct under intervention. The resulting model is observationally adequate but not
+interventionally valid, indicating an unfaithful cut.

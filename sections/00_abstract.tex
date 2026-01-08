@@ -1,0 +1,23 @@
+\begin{abstract}
+Predictive models are routinely evaluated by their ability to reproduce observed
+outcomes, yet many fail when used for intervention or control. This paper formalizes a
+structural source of such failures, which we term the \emph{Unfaithful Cut}: a
+representational reduction that is closed under prediction but not under intervention.
+Unfaithful cuts arise when distinct histories are collapsed into a single interface
+state, preserving observational accuracy while erasing distinctions that admissible
+interventions can later make operationally relevant.
+
+We characterize this failure as a representational and epistemic limitation rather than
+a statistical or optimization error. In the presence of an unfaithful cut, intervention
+behavior is fundamentally underdetermined by observational data alone, even with perfect
+predictive accuracy. We show that common remedies—including memory-augmented states and
+non-Markovian models—may restore predictive performance without resolving this
+interventional indeterminacy.
+
+We present a diagnostic perspective that makes this limitation explicit and illustrate its
+implications in sim-to-real robotics, offline reinforcement learning, and causal
+inference. The unfaithful cut provides a principled way to distinguish observational
+adequacy from interventional reliability, clarifying when predictive representations
+cannot, in principle, be trusted for control without additional intervention or
+experimentation.
+\end{abstract}

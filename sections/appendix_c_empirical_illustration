@@ -1,0 +1,114 @@
+\section{Empirical Illustration: A Minimal Offline-RL Setting}
+
+This appendix provides a deliberately minimal empirical-style illustration of the diagnostic in a
+simple control environment. The purpose is feasibility rather than performance: to illustrate, in a setting that
+resembles offline reinforcement learning, how an unfaithful cut can exist even when
+observational evaluation appears complete. The example is post-hoc and explanatory; it
+does not propose a deployable detection procedure.
+
+This illustration is intentionally minimal. Its role is not to demonstrate scalability
+or benchmark performance, but to establish a lower bound: that the epistemic failure
+identified by the unfaithful cut arises even in the simplest offline RL–like settings.
+Larger or more realistic benchmarks (e.g., MuJoCo or D4RL-style tasks) may amplify the
+phenomenon but do not alter its nature, since observational evaluation alone cannot
+certify interventional reliability when interface-level distinctions are collapsed.
+
+The example is deliberately minimal. It isolates the representational failure diagnosed
+by the unfaithful cut while abstracting away issues of function approximation, sample
+efficiency, or optimization. More complex environments amplify the same phenomenon but
+are not required to exhibit it. Crucially, the failure illustrated here is invisible under the logged data distribution:
+no amount of additional observational data collected under the behavior policy would
+reveal the impending intervention failure.
+
+\subsection{Environment}
+
+Consider a two-step environment with observations $o \in \{0,1\}$, actions
+$a \in \{0,1\}$, and an unobserved mode variable $m \in \{0,1\}$ that persists for the
+episode. The mode is sampled at the start of each episode with
+$P(m{=}0)=P(m{=}1)=\tfrac{1}{2}$. The agent observes $o_0=0$ initially in all episodes.
+
+At time $t=0$, the agent chooses action $a_0$ and receives the next observation $o_1$
+according to:
+\[
+P(o_1 = 1 \mid o_0=0, a_0=0, m)=\tfrac{1}{2}, \qquad
+P(o_1 = 1 \mid o_0=0, a_0=1, m)=\mathbb{I}[m=1].
+\]
+Intuitively, action $a_0=0$ produces an observation that is uninformative about the latent
+mode, while action $a_0=1$ reveals it perfectly.
+
+\subsection{A Predictively Adequate Reduction}
+
+Suppose a model is trained only on logged data collected by a behavior policy that
+overwhelmingly selects $a_0=0$ (e.g., $P_{\beta}(a_0=0)=0.99$). Under this logging policy,
+the conditional distribution of $o_1$ is approximately:
+\[
+P_{\beta}(o_1=1 \mid o_0=0) \approx \tfrac{1}{2}.
+\]
+A reduced representation that retains only the current observation,
+\[
+\pi(h) := o_0,
+\]
+is therefore observationally adequate for predicting logged outcomes at the model
+interface. It matches the observed distribution of $o_1$ under the behavior policy
+without representing the latent mode $m$.
+
+This mirrors a common offline RL pattern: the model appears reliable because the data
+collection policy does not excite the dynamics that would reveal hidden distinctions.
+Predictive evaluation alone provides no signal that the reduction is unsafe.
+
+\subsection{Intervention Failure Under a Policy Change}
+
+Now consider a deployment-time intervention corresponding to a policy change in which
+the agent selects $a_0=1$ at the same interface state $o_0=0$. Under this intervention,
+the next observation becomes mode-dependent:
+\[
+P(o_1=1 \mid o_0=0, a_0=1, m=0)=0, \qquad
+P(o_1=1 \mid o_0=0, a_0=1, m=1)=1.
+\]
+Two episodes that are indistinguishable at the interface (same $o_0=0$) but differ in
+latent history ($m$) now produce disjoint outcome distributions. Any model whose interface
+representation collapses these histories must assign the same prediction to both and is
+therefore necessarily wrong for at least one mode.
+
+This constitutes an unfaithful cut: the reduction is closed under prediction for the
+logged distribution but not closed under intervention induced by a policy change.
+
+\subsection{Applying the Diagnostic}
+
+We apply the diagnostic from Section~6.
+
+\begin{enumerate}[leftmargin=*, itemsep=2pt]
+  \item \textbf{Identify the model interface.} The model conditions only on $o_0$.
+  \item \textbf{Identify interface-equivalence classes.} All trajectories that reach
+        $o_0=0$ are equivalent at the interface, regardless of latent $m$.
+  \item \textbf{Specify admissible interventions.} The deployment system permits action
+        $a_0=1$ at $o_0=0$, corresponding to a policy change within the action set.
+  \item \textbf{Check whether the intervention separates interface-equivalent
+        trajectories.} Under $a_0=1$, the outcome distributions differ maximally across
+        modes.
+\end{enumerate}
+
+The diagnostic therefore characterizes an unfaithful cut in this setting: the interface
+collapses trajectories that admissible actions can later separate. This characterization
+does not rely on predictive error, but on reasoning about interventions outside the
+observed data distribution.
+
+\subsection{Notes on Stochastic Separation and Practical Scaling}
+
+This example also illustrates the stochastic form of separation. In general, admissible
+interventions may separate trajectories by inducing different outcome distributions
+rather than deterministic divergence. Any systematic post-intervention distributional
+difference over interface observations indicates that the representation has erased
+intervention-relevant distinctions.
+
+In larger or continuous systems, exact evaluation of separation may be infeasible.
+However, the same diagnostic logic applies. Sampling-based checks, stress-testing under policy perturbations, or divergence estimates
+over post-intervention rollouts can provide suggestive evidence of unfaithful cuts, but do
+not eliminate the underlying epistemic limitation: absent intervention or additional
+assumptions, observational data alone cannot certify intervention faithfulness. This
+example demonstrates feasibility rather than completeness and is intended to illustrate
+how the diagnostic extends naturally to offline reinforcement learning settings.
+
+These stochastic illustrations are intended to demonstrate the form the diagnostic takes
+in noisy settings, not to provide a complete formal treatment; developing general
+statistical guarantees for stochastic intervention separation remains an open problem.

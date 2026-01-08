@@ -1,0 +1,86 @@
+\section{The Diagnostic Test}
+
+This section describes the diagnostic role played by the unfaithful cut. The diagnostic
+is a structural validity criterion rather than a computational procedure. It does not
+prescribe an algorithm, nor guarantee tractable or decidable evaluation in general
+systems. Its purpose is to determine whether the interface-induced reduction preserves
+the distinctions that admissible interventions can make operationally relevant, and thus
+whether a model’s representation can, in principle, support reliable intervention.
+
+The test proceeds by fixing the model interface and considering the trajectory
+equivalence classes it induces. Two trajectories are equivalent if they are
+indistinguishable at this boundary under observation. Standard predictive evaluation
+implicitly assumes this equivalence is benign, since equivalent trajectories yield
+identical predictions for all observed queries.
+
+The diagnostic question is whether this equivalence is stable under intervention: whether
+there exists any admissible intervention that separates trajectories within a given
+equivalence class. Separation means the intervention produces different continuations
+despite identical interface states prior to acting.
+
+If no admissible intervention separates any interface-equivalence class, the reduction
+is intervention-consistent and the cut is faithful. If such a separating intervention
+exists, the cut is unfaithful. In that case, the model’s representation is
+observationally adequate but structurally incapable of supporting reliable intervention.
+
+Importantly, this diagnostic need not be executable as a concrete procedure. In complex
+systems, enumerating admissible interventions or determining their effects across
+trajectory equivalence classes may be computationally intractable or undecidable without
+additional domain knowledge. This limitation reflects where the failure lies: in what
+the representation makes indistinguishable, rather than in data scarcity or optimization
+quality.
+
+The diagnostic can nevertheless be applied prior to deployment without executing
+interventions on the real system. It requires specifying the interface, bounding
+admissible interventions by the deployment context, and checking whether those
+interventions could separate trajectories the representation treats as equivalent. When
+such reasoning indicates that the interface collapses intervention-relevant histories,
+no amount of additional data or optimization can guarantee reliable control.
+
+In open-ended, adaptive, or multi-agent environments, the boundary of what counts as an
+admissible intervention may itself be underspecified or evolving. This ambiguity is not
+a defect of the diagnostic but a reflection of the epistemic limits it formalizes: when
+the space of plausible interventions cannot be sharply bounded, observational evaluation
+alone cannot certify interventional reliability. In such settings, the unfaithful cut
+should be understood as identifying a class of representational risks rather than a
+decidable correctness condition.
+
+\subsection{Approximate and Heuristic Checks}
+
+In complex or high-dimensional systems, exact evaluation of intervention closure may be
+computationally infeasible. In such settings, the unfaithful cut is best understood as a
+structural risk indicator rather than a binary test. In stochastic or continuous
+settings, separation may be distributional rather than pointwise, but the criterion is
+the same: whether admissible interventions can induce distinguishable post-intervention
+behavior from interface-equivalent states.
+
+One pragmatic approach is to reason about intervention closure approximately. Instead of
+enumerating all trajectories within an interface-equivalence class, one may sample
+representative trajectories that the model maps to the same interface state and examine
+their responses to a limited set of admissible interventions. Evidence that an
+intervention induces divergent continuations—either deterministically or in
+distribution—supports a finding of an unfaithful cut.
+
+In stochastic systems, interventions may separate trajectories by inducing distinguishable
+outcome distributions over future interface observations. Any systematic divergence in post-intervention distributions indicates
+that the interface has collapsed distinctions that matter for control. The diagnostic
+does not prescribe a particular divergence measure or threshold; such choices are
+application-dependent.
+
+As with other structural diagnostics, approximate checks introduce epistemic trade-offs.
+False negatives may occur when admissible interventions fail to sufficiently excite
+distinctions collapsed by the interface, particularly in high-dimensional or weakly
+coupled systems. Conversely, false positives may arise when post-intervention divergence
+is statistically marginal or operationally irrelevant for the intended deployment
+context. These limitations reflect fundamental constraints on what can be inferred
+without exhaustive intervention.
+
+Approximate checks do not yield formal guarantees, but can be sufficient to identify
+high-risk representations prior to deployment. When even limited probing suggests that
+admissible interventions expose distinctions erased by the interface, the representation
+cannot be assumed to support reliable intervention, regardless of its predictive
+performance.
+
+Appendix~A and Appendix~C provide illustrative examples that walk through this diagnostic
+step by step, including a simple empirical-style setting that highlights stochastic
+separation under intervention.

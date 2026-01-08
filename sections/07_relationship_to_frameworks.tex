@@ -1,0 +1,183 @@
+\section{Relationship to Causal Inference and Related Work}
+
+This work does not propose a new modeling framework, learning algorithm, or causal
+formalism. It is diagnostic in scope. Its purpose is to identify a class of
+representational failures that can arise within otherwise well-established approaches.
+
+Unlike partial observability, causal confusion, or state abstraction failures—which
+attribute breakdowns to hidden variables, spurious correlations, or learning
+limitations—the unfaithful cut identifies failures induced by the chosen
+representational interface itself, even when the underlying system is fully observable
+and causally well-specified.
+
+The Unfaithful Cut does not replace causal graphical models. Structural causal models
+provide a language for representing interventions, but they rely on a chosen interface:
+a set of variables and abstractions that define which histories are treated as
+equivalent. An SCM can be correctly specified relative to its variables and still
+exhibit an unfaithful cut if those variables collapse intervention-relevant distinctions
+present in the underlying system.
+
+Similarly, this work does not replace reinforcement learning. Reinforcement learning
+algorithms operate over a defined state representation, whose faithfulness under
+intervention is typically assumed rather than tested. An unfaithful cut can therefore
+exist independently of the learning algorithm, affecting both online and offline RL
+despite correct optimization and evaluation within the assumed state space.
+
+Simulators are subject to the same limitation. A simulator may accurately reproduce
+observed rollouts while abstracting away structure that only becomes relevant under
+actuation. In such cases, the simulator is predictively adequate but interventionally
+invalid for certain classes of control. The Unfaithful Cut diagnoses this mismatch
+without proposing changes to the simulator itself.
+
+Non-Markovian models, memory-augmented architectures, and latent-state approaches are
+often introduced as remedies for these failures. While such models can improve
+predictive performance, they function as computational workarounds rather than
+structural guarantees. They encode task-dependent surrogates for history without
+ensuring that the resulting interface preserves counterfactual invariance under
+intervention.
+
+In all of these settings, the role of the Unfaithful Cut is the same: it diagnoses when a
+model, simulator, or abstraction is applied outside the domain in which its
+representational assumptions are valid. It does not compete with existing tools; it
+specifies a boundary condition on their reliable use.
+
+\subsection{Observability, Controllability, and Causal Hierarchies}
+
+Several aspects of the unfaithful cut are closely related to classical distinctions in
+control theory and causal inference.
+
+In control theory, observability and controllability are distinct properties of a
+physical system. A system may be observable but not controllable, controllable but not
+observable, both, or neither. The unfaithful cut is not a claim about the intrinsic
+observability or controllability of the underlying system. Rather, it concerns the
+representation induced by the model interface. An unfaithful cut can arise even when the
+physical system is fully observable and controllable, if the representation collapses
+distinctions required for intervention.
+
+From this perspective, the unfaithful cut is a representational analogue of partial
+observability, but not equivalent to classical partial observability as treated in
+control or reinforcement learning. It does not assert that the system state is hidden or
+unknowable, but that the chosen interface fails to preserve intervention-relevant
+distinctions between trajectories.
+
+The framework is also related to Pearl's causal hierarchy, which distinguishes between
+associational, interventional, and counterfactual reasoning. Observational adequacy
+corresponds to correctness at the associational level, while interventional validity
+concerns correctness under do-operations. The unfaithful cut identifies a failure mode
+in which a model appears adequate at the associational level but cannot be extended
+consistently to the interventional level due to how histories are reduced at the
+interface.
+
+From a causal inference perspective, such failures manifest as causal insufficiency: the
+variables exposed at the interface are insufficient to determine intervention outcomes.
+The unfaithful cut framework complements causal analysis by making the role of
+representational interface choices explicit, particularly in settings such as
+reinforcement learning and control where full causal graphs may be unavailable,
+underspecified, or impractical to construct. The unfaithful cut does not address identifiability or
+estimation, nor does it contradict causal inference results such as back-door or
+front-door criteria. Instead, it highlights a complementary issue: whether the variables
+or representations preserve the distinctions that interventions make operationally
+relevant in the first place.
+
+In this sense, the unfaithful cut operates at a level orthogonal to causal discovery,
+observability analysis, and control design. It is a validity condition on
+representations themselves, rather than on the underlying system dynamics or causal
+structure.
+
+\section{Related Work}
+
+This work relates to several established lines of research in machine learning,
+control theory, and causal inference. Rather than proposing an alternative framework,
+it identifies a representational failure mode that can arise within these approaches
+when models are applied under intervention.
+
+\paragraph{Causal Inference and Causal Hierarchies.}
+The distinction between observational and interventional reasoning is central to
+causal inference, most notably formalized in Pearl’s causal hierarchy
+\cite{pearl2009causality}. The unfaithful cut is compatible with this hierarchy but
+operates at a different level of abstraction. It does not concern identifiability or
+estimation given a fixed set of variables, but whether the chosen variables or
+representations preserve the distinctions required for interventional reasoning. The unfaithful cut highlights that causal sufficiency depends critically on
+representational choices: the same underlying system may admit both sufficient and
+insufficient causal descriptions depending on which variables are exposed at the model
+interface. Recent work on emergent and latent causal structure further
+emphasizes that causal distinctions may depend sensitively on representational choices,
+reinforcing the relevance of interface-level diagnostics
+\cite{zhang2021causalrep,ke2021causalrep,squires2024latentcausal}.
+
+\paragraph{Partial Observability and State Representations.}
+In control theory and reinforcement learning, partial observability is commonly treated
+through belief states, sufficient statistics, or history-based policies. Extensive work
+on partially observable Markov decision processes (POMDPs)
+\cite{kaelbling1998pomdp,brafman2003pomdp} studies conditions under which belief states
+are sufficient for optimal control. The unfaithful cut is related but not equivalent to
+partial observability. It does not assert that the underlying system state is hidden or
+unknowable, but that the model interface collapses trajectories in a way that is benign
+for prediction yet unstable under intervention. As discussed in Section~4, belief
+states can summarize uncertainty under a fixed observation process while remaining
+fragile to action-induced changes. The failure can occur even in systems that are fully
+observable at the physical level.
+
+\paragraph{State Abstraction and Aggregation in Reinforcement Learning.}
+A large literature studies state abstraction, aggregation, and representation learning
+in reinforcement learning
+\cite{li2006stateabstraction,abel2020stateabstraction}. Many abstraction schemes are
+evaluated based on predictive or control performance under a fixed policy or data
+distribution. The unfaithful cut highlights a complementary concern: whether an
+abstraction preserves equivalence classes that remain valid under changes in action or
+policy. This frames known brittleness under policy shift as a structural
+representational issue rather than a learning deficiency.
+
+In contrast to state aliasing analyses in reinforcement learning, which are typically
+defined relative to value preservation or policy optimality, the unfaithful cut is
+defined purely at the level of representational distinguishability under admissible
+interventions, independent of rewards, objectives, or learning algorithms.
+
+\paragraph{Imitation Learning and Causal Confusion.}
+Work on causal confusion in imitation learning \cite{dehaan2019causalconfusion} shows
+that policies trained from observational data can exploit correlations that fail under
+intervention. The unfaithful cut provides a general representational explanation for
+these failures, independent of the learning algorithm or domain.
+
+\paragraph{Offline Reinforcement Learning and Policy Shift.}
+Offline reinforcement learning studies the challenge of learning from fixed datasets
+while remaining robust to policy changes at deployment
+\cite{agarwal2021offlineRL,krueger2023oodRL}. While much of this work focuses on algorithmic
+mitigation of distribution shift, the unfaithful cut diagnoses a structural reason
+brittleness can persist even when predictive evaluation appears thorough: the
+representation itself may collapse trajectories that are separated by admissible
+actions.
+
+\paragraph{Sim-to-Real Transfer and the Reality Gap.}
+In robotics, the sim-to-real gap \cite{tobin2017domainrandomization} refers to controllers
+that perform well in simulation but fail on physical systems. More recent surveys and
+robustness-focused work emphasize the continued sensitivity of sim-to-real transfer to
+representational choices
+\cite{zhao2022sim2real_survey,peng2024robustpolicies}. The unfaithful cut reframes
+sim-to-real failures as arising from reductions that are predictive under observation
+but not closed under actuation.
+
+\paragraph{Invariant, Causal, and Robust Representations.}
+Recent work focuses on learning representations stable under distribution shift or
+intervention, including invariant risk minimization
+\cite{arjovsky2020invariant}, causal representation learning
+\cite{zhang2021causalrep}, and causal reinforcement learning
+\cite{zhang2021causalRLsurvey,sun2023causalrl}. These approaches aim to construct
+representations that generalize beyond the training distribution. The unfaithful cut
+plays a complementary role: it diagnoses when a given representation—learned or
+hand-designed—cannot, in principle, support reliable intervention because it collapses
+trajectories that admissible actions can later separate.
+
+\paragraph{Sufficiency and Information Preservation.}
+Classical notions of sufficient statistics and information-preserving reductions
+\cite{cover2006informationtheory} identify conditions under which compressed
+representations retain all information relevant to a given task. The unfaithful cut
+identifies when a reduction is sufficient for prediction but insufficient for
+intervention, clarifying that intervention-consistent representations require stronger
+conditions than predictive sufficiency alone.
+
+Taken together, these connections position the unfaithful cut as a unifying diagnostic
+concept across causal inference, control, and representation learning. It does not
+replace existing theories or methods, but provides a criterion for identifying when
+their application is undermined by representational assumptions that fail under
+intervention.

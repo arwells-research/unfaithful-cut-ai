@@ -1,0 +1,96 @@
+\section{Illustrative Toy Example: An Unfaithful Cut}
+
+This appendix provides a minimal, concrete example illustrating an unfaithful cut and
+the diagnostic described in Section~6. The example is intentionally simple and does not
+involve learning, estimation, or function approximation. Its purpose is not to introduce
+a new causal pathology, but to make explicit a fundamental epistemic limitation of
+observational evaluation.
+
+Specifically, the example shows how two system histories that are indistinguishable at a
+chosen model interface can nonetheless diverge under admissible intervention, even when
+observational prediction at that interface is perfect. From a causal perspective, this
+corresponds to a form of causal insufficiency induced by representational choice. The
+unfaithful cut framework makes this failure explicit at the level of the interface,
+independent of any particular causal formalism.
+
+\subsection{The System}
+
+Consider a deterministic system with an internal mode variable
+$m \in \{0,1\}$, an observable variable $x \in \mathbb{R}$, and a binary action
+$a \in \{0,1\}$. The internal mode $m$ is not observable at the model interface.
+
+The system evolves as follows. Under passive observation (no intervention),
+both modes produce identical observations:
+\[
+x_t = 0 \quad \text{for all } t,
+\]
+regardless of the value of $m$.
+
+Thus, under observation, trajectories corresponding to $m=0$ and $m=1$ are
+indistinguishable.
+
+\subsection{The Reduction}
+
+Suppose a model is constructed whose interface consists solely of the observable
+variable $x$. The model therefore represents system state using $x_t$ and ignores
+the internal mode $m$.
+
+This induces a reduction in which all trajectories with different values of $m$
+are mapped to the same interface representation whenever $x_t = 0$.
+
+Under observational evaluation, this reduction is sufficient. The model can
+predict observed outcomes perfectly, since all observed data are reproduced
+exactly at the interface.
+
+The reduction is therefore closed under prediction.
+
+\subsection{The Intervention Failure}
+
+Now consider an admissible intervention defined by taking action $a=1$ at time
+$t$.
+
+The effect of the intervention depends on the internal mode:
+\[
+\text{if } m = 0, \quad x_{t+1} = +1,
+\]
+\[
+\text{if } m = 1, \quad x_{t+1} = -1.
+\]
+
+Thus, the same action separates trajectories that were previously indistinguishable
+at the model interface. Two trajectories with identical interface state $x_t = 0$
+lead to different outcomes under intervention.
+
+Because the model cannot distinguish the underlying modes, it must assign the
+same predicted outcome to both cases. Under intervention, this prediction is
+necessarily incorrect for at least one trajectory.
+
+This constitutes an intervention failure despite perfect observational accuracy.
+
+\subsection{The Diagnostic}
+
+We now apply the diagnostic from Section~6.
+
+First, identify the model interface. Here, the interface consists solely of the
+observable variable $x$.
+
+Second, identify interface equivalence classes. All trajectories with different
+values of $m$ are equivalent at the interface whenever $x_t = 0$.
+
+Third, identify admissible interventions. The action $a=1$ is admissible at time
+$t$.
+
+Finally, ask whether the intervention separates trajectories within an
+interface-equivalence class. In this system, the action $a=1$ leads to different
+outcomes depending on the value of $m$, despite identical interface states prior
+to intervention.
+
+The diagnostic therefore flags an unfaithful cut. The reduction is closed under
+prediction but not closed under intervention.
+
+This example demonstrates that intervention failure can arise purely from
+representational structure, independent of data, learning, or optimization. Crucially,
+the failure is not detectable from observational data alone: no amount of passive
+evaluation at the interface can distinguish the histories or anticipate their divergent
+responses to intervention. The unfaithful cut makes explicit this epistemic limitation
+and shows how it follows directly from the choice of interface representation.
